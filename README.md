@@ -25,8 +25,8 @@ In symbol table, there a list of names and their corresponding offset in txt or 
 For static link, libraries are attached by linker at linking process.  
 For dynamic link (e.g. win `.dll`, linux `.so`), libraries are attached by linker at running time.  
 
-For static link, executables would exist as single file instead of multiple files and only contain the necessary part of library.  
-For dynamic link, linker made the reference to the shared obj and put into executables. Dynamic linked executables must load entire library because they are not able to know about the invoked library in advance.
+For static link, executables would exist as single file instead of multiple files and only contain the necessary part of library. For static libraries, it would be format of `.a` in linux or `.lib` in windows.  
+For dynamic link, linker made the reference to the shared obj and put into executables. Dynamic linked executables must load entire library because they are not able to know about the invoked library in advance. For dynamic libraries, it would be format of `.so` in linux or `.dll` in windows.
 
 ### ELF (Executable and Linkable Format)
 ![](/img/linking_execution.png)  
