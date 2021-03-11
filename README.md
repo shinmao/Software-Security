@@ -13,6 +13,9 @@ The linker would turn bunch of files into an executable.
 
 ## Linking process
 In the linking process, there are several important informations.  
+### Address and Storage Allocation
+### Symbol Resolution
+It can also be called as Symbol Binding, Name Binding, Name Resolution, etc. In details, resolution works for static-linking and binding works for dynamic-linking.
 ### Relocations
 Object files would include many reference to others' code or data. In the linking process, linker would use relocations to fill in virtual address.
 
