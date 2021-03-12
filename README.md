@@ -79,6 +79,9 @@ sections:
 * `.bss`: store global variables with no init values
 * `.rodata`: store read-only data
 
+Reading:  
+* [The 101 of ELF files on Linux: Understanding and Analysis](https://linux-audit.com/elf-binaries-on-linux-understanding-and-analysis/)
+
 ### GOT (Global Offset Table)
 First, what is **Lazy binding**?  
 ELF loada the entire library with several unecessary functions. Therefore, lazy binding let ELF find real address only after call function for the first time (This is also why it is called lazy).  
