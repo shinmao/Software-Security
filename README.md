@@ -94,3 +94,7 @@ Where is GOT table? It resides in data section.
 How do we use GOT to get the address of function? The most important part in GOT is `.got.plt`.  
 ![](/img/lazy-binding.png)  
 When we see `call <puts@plt>` in the program, it means that program will call `.got.plt` for help. `.got.plt` would locate to `puts@plt+6`. In order to run `puts@plt+6`, program would search `puts@plt`'s location first, then we can find that the first instruction in `puts@plt` is `jmp puts@got`, which means to run next line directly. Come to `plt0`, program would push `link_map` to the stack, with `index` previously pushed, program has all the parameters needed for `dl_runtime_resolve()` now! The resolve functon will call `call_fix_up()` to replace `puts@plt+6` with the real address.
+
+## Symbolic Execution
+* [Symbolic execution for software testing: three decades later](https://zhuanlan.zhihu.com/p/26927127?fbclid=IwAR2PQ-0wiOf9zZxMJSdCeuQ3NrdCVfxjRM4qSrjqyVuuIH0SLLCXVMrdpvg)
+* [关于静态分析技术符号执行，从一个故事讲起······](https://bbs.huaweicloud.com/blogs/205975)
