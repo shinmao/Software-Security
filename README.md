@@ -106,3 +106,4 @@ When we see `call <puts@plt>` in the program, it means that program will call `.
 
 ## Automatic Exploit Generation
 * [软件漏洞自动利用研究进展](https://github.com/SCUBSRGroup/Automatic-Exploit-Generation)
+* [Mr.Ma3k4H3d's blog](https://ma3k4h3d.top/)
