@@ -95,6 +95,36 @@ How do we use GOT to get the address of function? The most important part in GOT
 ![](/img/lazy-binding.png)  
 When we see `call <puts@plt>` in the program, it means that program will call `.got.plt` for help. `.got.plt` would locate to `puts@plt+6`. In order to run `puts@plt+6`, program would search `puts@plt`'s location first, then we can find that the first instruction in `puts@plt` is `jmp puts@got`, which means to run next line directly. Come to `plt0`, program would push `link_map` to the stack, with `index` previously pushed, program has all the parameters needed for `dl_runtime_resolve()` now! The resolve functon will call `call_fix_up()` to replace `puts@plt+6` with the real address.
 
+## Software analysis
+
+### Program Slicing
+A technique to decompose programs by analyzing their data and control flow.  
+slicing criterion: slice consists of program statements related to the values computed at point or variable.  
+e.g. Given program p, `<s, v>` which specifies a statement s and a set of variables v we are interested in p. We always assign `s` with line number.  
+A slice itself is an program susbset.  
+
+To extract a slice, the dependences between statements must be computed first.  
+Control Flow Graph (CFG): control dependencies for each operation.  
+Program Dependence Graph (PDG): help to build slices in linear time.  
+: nodes represent statements in source code, edges represent control and data flow dependences.
+
+* Static slicing
+Not assume any input for program.  
+The slice is called static because it doesn't not consider any particular execution i.e., it works for any possible input data.  
+* Dynamic slicing  
+Useful for debugging.  
+In general, dynamic slice is smaller than static ones.  
+During program execution, the same statement can be executed several times with different values of variables (e.g. `for-loop`); therefore, slicing criterion needs to specify which particular execution of interest, `<si, v, {a1, a2, ...an}>`. `si` represents statement s executed for ith time, and `{a1, a2, ...an}` represents initial values of the program inputs.  
+* Backward Slicing  
+Traverse backward from slicing criterion.  
+We are interested in all statements that would affect slicing criterion.  
+Main application for debugging, program differencing and testing.  
+* Forward Slicing  
+How modification in a part of program can affect other parts of the program?  
+Main application for software maintenance.
+
+* [A vocabulary of program slicing-based techniques](https://dl.acm.org/doi/10.1145/2187671.2187674)
+
 ## Fuzzing
 * [Recent Papers Related To Fuzzing](https://github.com/wcventure/FuzzingPaper)
 * [Fuzzing技术总结（Brief Surveys on Fuzz Testing）](https://zhuanlan.zhihu.com/p/43432370)
