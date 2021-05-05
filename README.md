@@ -23,8 +23,8 @@ Object files would include many reference to others' code or data. In the linkin
 In symbol table, there a list of names and their corresponding offset in txt or data segments.
 
 ### Static link v.s. Dynamic link
-![](/img/static-link.png)  
-![](/img/dynamic-link.png)  
+<img src="/img/static-link.png" width="50%">    
+<img src="/img/dynamic-link.png" width="50%">  
 For static link, libraries are attached by linker at linking process.  
 For dynamic link (e.g. win `.dll`, linux `.so`), libraries are attached by linker at running time.  
 
@@ -32,7 +32,7 @@ For static link, executables would exist as single file instead of multiple file
 For dynamic link, linker made the reference to the shared obj and put into executables. Dynamic linked executables must load entire library because they are not able to know about the invoked library in advance. For dynamic libraries, it would be format of `.so` in linux or `.dll` in windows.
 
 ### ELF (Executable and Linkable Format)
-![](/img/linking_execution.png)  
+<img src="/img/linking_execution.png" width="50%">  
 ELF is the way we specify the layout of obj file on Linux systems. There are two kinds of view ways for ELF at linking time (left side) and execution time (right side).  
 Linking view deals with sections, which provide information necessary at linking time. Section has name and type, and can be located by section header table. Each section has one corresponding section header, and won't overlap with each others.  
 Execution view deals with segments, which provide information necessary at running time. Segments consist of a group of sections, e.g. `.txt` contains code, `.data` contains data, `.dynamic` is related to dynamic loading.
@@ -92,10 +92,16 @@ objdump -d elf
 And you can find something like `call <puts@plt>`.  
 Where is GOT table? It resides in data section.  
 How do we use GOT to get the address of function? The most important part in GOT is `.got.plt`.  
-![](/img/lazy-binding.png)  
+<img src="/img/lazy-binding.png" width="50%">  
 When we see `call <puts@plt>` in the program, it means that program will call `.got.plt` for help. `.got.plt` would locate to `puts@plt+6`. In order to run `puts@plt+6`, program would search `puts@plt`'s location first, then we can find that the first instruction in `puts@plt` is `jmp puts@got`, which means to run next line directly. Come to `plt0`, program would push `link_map` to the stack, with `index` previously pushed, program has all the parameters needed for `dl_runtime_resolve()` now! The resolve functon will call `call_fix_up()` to replace `puts@plt+6` with the real address.
 
 ## Software analysis
+
+### CFG
+With CFG, we can understand the program structure, and use it to achieve vulnerability mining and bug analysis.
+
+* Static CFG analysis
+* Dynamic CFG analysis
 
 ### Program Slicing
 A technique to decompose programs by analyzing their data and control flow.  
