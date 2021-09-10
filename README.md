@@ -141,5 +141,15 @@ Main application for software maintenance.
 * [关于静态分析技术符号执行，从一个故事讲起······](https://bbs.huaweicloud.com/blogs/205975)
 
 ## Automatic Exploit Generation
+The first paper about Automatic Exploit Generation was released in 2008 on APEG, which was patch-based. Year 2016 is so special that DARPRA gave an CGC challenge, and most of the research work before 2016 are based on stack, format string while most of the work are based on heap (heap overflow, UAF) after 2016. Therefore, in following section about research paper, I would also separated them to stack-based and heap-based.
+
+### Research paper
+#### Revery
+* [CCS-18 Revery: From Proof-of-Concept to Exploitable](https://dl.acm.org/doi/10.1145/3243734.3243847)  
+* [slide notes](https://github.com/shinmao/Software-Security/blob/main/slides/Revery-From-PoC-to-Exploitable.pdf)
+
+#### Reference
 * [软件漏洞自动利用研究进展](https://github.com/SCUBSRGroup/Automatic-Exploit-Generation)
+* * [SCUBSRGroup /
+Automatic-Exploit-Generation](https://github.com/SCUBSRGroup/Automatic-Exploit-Generation)
 * [Mr.Ma3k4H3d's blog](https://ma3k4h3d.top/)
