@@ -191,6 +191,16 @@ Most of the cases, we combine two solutions.
 To solve path explosion problem, we need to decide which paths to explore.  
 Strategies include DFS(explore nested code first), BFS(explore all paths in parallel), and so on.
 
+### How to make scalability better?
+#### Simplfying constraints
+* limit the number of symbolic variables, but how to promise you symbolize the "interesting" program paths?  
+employ taint analysis and fuzzing to find vulnerability. Symbolize only those inputs that taint analysis show to be relevant to vulnerability (e.g., overwritten return address) 
+* Only symbolically execute the related instructions, e.g., what we are concerned about is only rax register, we can make a backward slice to find out all related instructions which would contribute to rax's value. The rest of the path should be conrete.  
+* Don't make fully symbolic memory, it is crazy to symbolize unbounded memory address. e.g., Triton only accesses word-aligned addresses.
+
+#### Avoiding constraint solver
+Avoid using constraint solver on the path you are not interested in, and avoid using constraint solver on same problem for twice (we can cache prev results).
+
 ### Reading list
 * [My learning notes for Symbolic Execution](https://github.com/shinmao/Software-Security/blob/main/slides/symbolic%20execution.pdf)
 * [Symbolic execution for software testing: three decades later](https://zhuanlan.zhihu.com/p/26927127?fbclid=IwAR2PQ-0wiOf9zZxMJSdCeuQ3NrdCVfxjRM4qSrjqyVuuIH0SLLCXVMrdpvg)
