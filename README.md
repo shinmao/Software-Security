@@ -136,6 +136,62 @@ Main application for software maintenance.
 * [Fuzzing技术总结（Brief Surveys on Fuzz Testing）](https://zhuanlan.zhihu.com/p/43432370)
 
 ## Symbolic Execution
+Symbolic execution(Symbex) emulates a program with symbolic values rather than concrete values. Symbex engines maintain the collection of symbolic values and formulas which is called symbolic state. What are the components of symbolic states?
+```
+symbolic state = symbolic expressions + path constraints
+```
+Path constraints(branch constraints) encode the limitation imposed on symbolic expressions.
+```
+--> code
+if(x < 5)
+  if(y >= 4)
+--> sym expr
+x -> a1
+y -> a2
+--> path constraint
+(a1 < 5) ^ (a2 >= 4)
+```
+When we feed path constraint to constraint solver, it will solve the possible solutions of symbolic variables for us.  
+### Symbex variants and limitations
+#### Static symbolic execution
+Explore multiple program paths in parallel.  
+Advantage:
+* Don't need to run program
+* Do need to analyze whole program  
+
+Disadvantage:
+* scalability
+Even with heuristics to limit the number of explored paths, cannot sure capture all interesting paths.
+* Needs some efforts to handle the interaction with the environment out of program itself (libraries, system call).  
+  * Sol1 - effect modeling, make a summary of the effects that system call or libraries can have on symbolic state. However, the model of summary is hard to be accurate. Also, we need to rewrite for different environments.  
+  * Sol2 - Direct external interaction, just leave the engine make the call directly. However, if explored multiple paths operate on the same file in parallel, it would cause to conflict issue. Also, it is hard to decide conrete value for library.
+
+#### Dynamic symbolic execution (Concolic execution)
+Use concrete input to drive the execution while maintaining symbolic state as metadata. Rather than exploring paths in parallel, concolic execution only explore one path at once decided by the input. To explore different paths, concolic execution would flip the path constraints, and constraint solver would compute the concrete input that can lead to new branch, then we can start a new state.  
+Advantage:  
+* more scalable  
+We don't need to mantain multiple execution states in parallel.  
+* simply running external interaction with conrete input
+* maintain fewer and more interesting symbolic states such as variables, also make solver easier to compute  
+
+Disadvantage:  
+* Coverage depends on initial concrete input
+
+#### Online vs. Offline
+Online means working in parallel while offline means working one path at once. There are also some implementations of offline static symbex and online dynamic symbex. Offline would execute same chunk of code for multiple times compared to online. However, online would need to track all states in parallel and cause to memory issue.
+
+#### Symbolic state
+Which part of program should be represented symbolically and which to be conrete? How should the symbolic state updated with some memory operation(e.g., value is written to array with symbolic index)?  
+* Sol1 - Fully symbolic memory, one is copy several states for all possible values. If there is a constraint `a1 < 5` on index, then we can fork states for `a1 = 0, 1, ...4`. However, if the symbolic part is unbounded address, it would be impossible to list all values.  
+* Sol2 - Address concretization, replace unbounded address with concrete values. However, it depends on value so that we might loss some interesting possible states.  
+
+Most of the cases, we combine two solutions.
+
+#### Path coverage
+To solve path explosion problem, we need to decide which paths to explore.  
+Strategies include DFS(explore nested code first), BFS(explore all paths in parallel), and so on.
+
+### Reading list
 * [My learning notes for Symbolic Execution](https://github.com/shinmao/Software-Security/blob/main/slides/symbolic%20execution.pdf)
 * [Symbolic execution for software testing: three decades later](https://zhuanlan.zhihu.com/p/26927127?fbclid=IwAR2PQ-0wiOf9zZxMJSdCeuQ3NrdCVfxjRM4qSrjqyVuuIH0SLLCXVMrdpvg)
 * [关于静态分析技术符号执行，从一个故事讲起······](https://bbs.huaweicloud.com/blogs/205975)
@@ -150,6 +206,6 @@ The first paper about Automatic Exploit Generation was released in 2008 on APEG,
 
 #### Reference
 * [软件漏洞自动利用研究进展](https://github.com/SCUBSRGroup/Automatic-Exploit-Generation)
-* * [SCUBSRGroup /
+* [SCUBSRGroup /
 Automatic-Exploit-Generation](https://github.com/SCUBSRGroup/Automatic-Exploit-Generation)
 * [Mr.Ma3k4H3d's blog](https://ma3k4h3d.top/)
